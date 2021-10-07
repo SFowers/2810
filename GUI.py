@@ -12,7 +12,9 @@ cursor = connection.cursor()
 class Application:
     """ A CLASS FOR THE DATA ANALYSIS / VISUALISATION TOOL"""
 
-    def __init__(self, root):
+    def __init__(self, root, dset, names):
+        self.dataset = dset
+        self.header_names = names
 
         # TITLE FOR THE WINDOW 
         root.title("Data Analysis/Visualisation Tool")
@@ -72,7 +74,7 @@ class Application:
         ttk.Button(navigationFrame, text="Visualise", command=self.visualisations, width=20).grid(column=9, row=0, sticky=(N),padx=10,pady=(50, 20))
         ttk.Button(navigationFrame, text="Clear", command=self.Clear, width=20).grid(column=10, row=0, sticky=(N),padx=10, pady=(50, 20))
 
-        # SQL TO SELECT TABLE HEADINGS 
+        # SQL TO SELECT TABLE HEADINGS ############ MOVE THIS TO OUTSIDE THE CLASS THEN PASS IT IN #############
         cursor.execute('SELECT * FROM NYC_RESTAURANT_INSPECTION_DATA')
         names = list(map(lambda x: x[0], cursor.description))
 
@@ -93,6 +95,9 @@ class Application:
         tree.pack(fill='both')
         tree_scrolly.configure(command=tree.yview)
         tree_scrollx.configure(command=tree.xview)
+        
+    def update_dataset(self, dset):
+        self.dataset = dset
       
     #BUTTON FUNCTIONS
     def searchButton(self, *args):
